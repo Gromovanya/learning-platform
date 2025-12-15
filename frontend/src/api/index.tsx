@@ -1,4 +1,4 @@
-import axios, { AxiosError, type AxiosResponse, type AxiosRequestConfig } from "axios";
+import axios, { AxiosError, type AxiosResponse, type AxiosInstance, type InternalAxiosRequestConfig } from "axios";
 import { getAccessToken, setAccessToken } from "./accessToken";
 import { refreshApi } from "./auth";
 // import { useNavigate } from "react-router-dom";
@@ -9,13 +9,13 @@ let isRefreshing = false;
 let failedQueue: Array<{
     resolve: (value: Promise<AxiosResponse>) => void;
     reject: (reason?: AxiosError) => void;
-    config: AxiosRequestConfig;
+    config: InternalAxiosRequestConfig;
 }> = [];
 
 const processQueue = (error: AxiosError | null = null, token: string | null = null) => {
     failedQueue.forEach(prom => {
         if (token) {
-            prom.config.headers = {...(prom.config.headers as Record<string, string>), Authorization: `Bearer ${token}`}
+            prom.config.headers.Authorization = `Bearer ${token}`
             prom.resolve(api.request(prom.config))
         } else {
             if (axios.isAxiosError(error)) {
@@ -26,12 +26,12 @@ const processQueue = (error: AxiosError | null = null, token: string | null = nu
     failedQueue = []
 };
 
-export const api = axios.create({
+export const api: AxiosInstance = axios.create({
     baseURL: "/api",
     withCredentials: true,
 });
 
-api.interceptors.request.use((config) => {
+api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     const token = getAccessToken();
     if (token) {
         config.headers.Authorization = `Bearer ${token}`

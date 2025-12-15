@@ -17,11 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from apps.users import views
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
 urlpatterns = [
-    path('api/login/', views.LoginView.as_view()),
-    path('api/register/', views.RegisterView.as_view()),
-    path('api/logout/', views.LogoutView.as_view()),
-    path('api/refresh/', views.NewAccessTokenView.as_view()),
-    path('api/csrf/', views.get_csrf_token)
+    # Api CSRF
+    path('api/csrf/', views.get_csrf_token),
+
+    # Api auth
+    path('api/login/', views.LoginView.as_view(), name='login'),
+    path('api/register/', views.RegisterView.as_view(), name='register'),
+    path('api/logout/', views.LogoutView.as_view(), name='logout'),
+    path('api/refresh/', views.NewAccessTokenView.as_view(), name='refresh'),
+
+    # OpenApi
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
+    path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+
 ]

@@ -1,0 +1,1 @@
+export type ErrorMessagesRegister = Record<string, Array<string>>;

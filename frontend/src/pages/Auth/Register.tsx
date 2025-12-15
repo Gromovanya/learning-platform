@@ -5,31 +5,32 @@ import { registerApi } from '../../api/auth';
 import { useNavigate, Link } from 'react-router-dom';
 import DropdownHintPassword from '../../components/Button/HintPassword';
 import axios from 'axios';
+import type { ErrorMessagesRegister } from '../../types/validations';
 
 
 function RegisterPage() {
     const [username, setName] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMessages, setErrorMessages] = useState({'username': [], 'password': []});
-    const navigate = useNavigate()
+    const [errorMessages, setErrorMessages] = useState<ErrorMessagesRegister>({'username': [], 'password': []});
+    const navigate = useNavigate();
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {
             console.log("Форма отправлена!", { username, password });
-            await registerApi(username, password);
-            navigate('/')
+            await registerApi({'username': username, 'password': password});
+            navigate('/');
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
                 if (error.response) {
                     if (error.response.status === 400) {
-                        const data = error.response.data
-                        setErrorMessages({'username': data.username, 'password': data.password})
-                    }
-                }
-            }
-        }
-    }
+                        const data: ErrorMessagesRegister = error.response.data;
+                        setErrorMessages({'username': data.username, 'password': data.password});
+                    };
+                };
+            };
+        };
+    };
 
     return (
         <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">

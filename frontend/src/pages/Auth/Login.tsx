@@ -9,25 +9,25 @@ function LoginPage() {
     const [username, setName] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessages, setErrorMessages] = useState('');
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {
         console.log("Форма отправлена!", { username, password });
-            await loginApi(username, password);
+            await loginApi({'username': username, 'password': password});
             navigate('/');
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
                 if (error.response) {
                     if (error.response.status === 401) {
-                        setErrorMessages('Incorrect password or login!')
-                        console.error("Ошибка аутентификации:", error.response.data);
-                    }
-                }
-            }
+                        setErrorMessages('Incorrect password or login!');
+                        console.error("Ошибка аутентификации: ", error.response.data);
+                    };
+                };
+            };
         };
-    }
+    };
 
     return (
         <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">

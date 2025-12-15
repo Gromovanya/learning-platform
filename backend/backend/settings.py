@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
-    'apps.users'
+    'drf_spectacular',
+    'apps.users',
 ]
 
 MIDDLEWARE = [
@@ -62,6 +63,7 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ['rest_framework_simplejwt.authentication.JWTAuthentication'],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
@@ -77,6 +79,27 @@ SIMPLE_JWT = {
     'AUTH_COOKIE_SECURE': not env('DEBUG'),
     'AUTH_COOKIE_HTTP_ONLY': True,
     'AUTH_COOKIE_SAMESITE': 'Lax',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'API request and response',
+    'VERSION': 'v1',
+
+    'SECURITY': [
+        {
+            'BearerAuth': [],
+        }
+    ],
+    
+    'COMPONENTS': {
+        'securitySchemes': {
+            'BearerAuth': {
+                'type': 'http',
+                'scheme': 'bearer',
+                'bearerFormat': 'JWT',
+            }
+        }
+    }
 }
 
 ROOT_URLCONF = 'backend.urls'

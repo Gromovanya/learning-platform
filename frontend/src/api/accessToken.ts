@@ -1,9 +1,9 @@
 let accessToken: string | null = null;
 
-export function setAccessToken(token: string | null) {
-    accessToken = token
+export function setAccessToken(token: string | null): void {
+    accessToken = token;
 }
 
-export function getAccessToken() {
-    return accessToken
+export function getAccessToken(): string | null {
+    return accessToken;
 }

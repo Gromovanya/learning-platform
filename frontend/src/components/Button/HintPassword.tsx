@@ -57,7 +57,7 @@ function DropdownHintPassword() {
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
 export default DropdownHintPassword;
