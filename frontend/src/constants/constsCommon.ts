@@ -1,0 +1,1 @@
+export const NOT_FIND_INDEX = -1
