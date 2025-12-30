@@ -121,5 +121,12 @@ class NewAccessTokenView(TokenRefreshView):
     )
     @set_cookie_refresh_token
     def post(self, request, *args, **kwargs):
+        refresh_token = request.COOKIES.get('refresh')
+        if refresh_token:
+            request.data['refresh'] = refresh_token
         response = super().post(request, *args, **kwargs)
         return response
+    
+class Error500View(APIView):
+    def get(self, request, *args, **kwargs):
+        return Response(data={'detail': 'test toast window is error on front!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
