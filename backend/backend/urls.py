@@ -18,20 +18,20 @@ from django.contrib import admin
 from django.urls import path, include
 from apps.users import views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     # Api test error
     path('api/error/500', views.Error500View.as_view()),
 
-    # Api CSRF
-    path('api/csrf/', views.get_csrf_token),
-
     # Api auth
     path('api/auth/', include('apps.users.urls')),
+    path('api/educ/', include('apps.education.urls')),
 
     # OpenApi
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger'),
     path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

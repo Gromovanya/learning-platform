@@ -30,6 +30,8 @@ api.interceptors.response.use(
     resp => resp,
     async error => {
 
+        if (axios.isCancel(error)) return Promise.reject(error);
+
         if (!error.response && navigator.onLine) {
             setTimeout(() => useNotificationStore.getState().addNotification("Сервер недоступен. Попробуйте позже."), 100);
             return Promise.reject(error);

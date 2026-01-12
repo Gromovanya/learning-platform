@@ -6,4 +6,5 @@ export const URL_LOGIN = "/auth/login";
 export const URL_REGISTER = "/auth/register";
 export const URL_PROFILE = '/profile'
 export const URL_HOME = "/";
+export const URL_SESSION = "session";
 export const UNKNOWN_PATH = '*'

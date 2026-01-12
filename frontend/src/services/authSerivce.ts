@@ -1,17 +1,12 @@
 import { api } from "../api/api"
 import type { AuthResponse, Register } from "../api/generated";
 import { API_LOGIN, API_LOGOUT, API_REFRESH, API_REGISTER } from "../constants/constsApiPath"
-import type { LoginRequest } from "../types/auth";
-import axios from "axios";
+import axios, { type AxiosResponse } from "axios";
 import { useAuthStore } from "../store/authStore";
 import { useNotificationStore } from "../store/notificationStore";
+import type { LoginRequest } from "../shared/api/schemas";
 
-let refreshPromise: Promise<void> | null = null;
-const updateAccess = (token: string) => {
-    if (token) {
-        useAuthStore.getState().setAccessToken(token);
-    }
-}
+let refreshPromise: Promise<AxiosResponse<AuthResponse> | void> | null = null;
 
 export const authService = {
 
@@ -21,8 +16,11 @@ export const authService = {
         refreshPromise = (async () => {
             try {
                 const resp = await api.post<AuthResponse>(API_REFRESH);
-                const token = resp.data.access
-                if (token) updateAccess(token)
+                if (!refreshPromise) return;
+
+                useAuthStore.getState().setAccessToken(resp.data.access);
+                return resp
+
             } finally {
                 refreshPromise = null
             }
@@ -32,14 +30,17 @@ export const authService = {
 
     async loginUser(data: LoginRequest) {
         const resp = await api.post<AuthResponse>(API_LOGIN, data);
-        const token = resp.data.access
-        if (token) updateAccess(token)
+        const { access, user } = resp.data
+        useAuthStore.getState().setAccessToken(access);
+        useAuthStore.getState().setUser(user)
     },
 
     async registerUser(data: Register) {
         const resp = await api.post<AuthResponse>(API_REGISTER, data);
-        const token = resp.data.access
-        if (token) updateAccess(token)
+        const { access, user } = resp.data
+        useAuthStore.getState().setAccessToken(access);
+        useAuthStore.getState().setUser(user)
+
     },
 
     async logoutUser() {
@@ -50,18 +51,22 @@ export const authService = {
         } finally {
             useNotificationStore.getState().clearNotifications()
             useAuthStore.getState().logout()
+            refreshPromise = null
         }
     },
 
     async init() {
         try {
             // console.log(refreshPromise)
-            await this.refreshUser();
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                console.warn("Session init: User is guest or session expired: ", error.response?.data);
+            const resp = await this.refreshUser();
+            if (resp && resp.data) {
+                useAuthStore.getState().setUser(resp.data.user);
             }
-           useAuthStore.getState().logout();
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                console.warn("Session init: User is guest or session expired: ", error.response?.data);
+                useAuthStore.getState().logout();
+            }
         } finally {
             useAuthStore.getState().setInitialized(true);
         }

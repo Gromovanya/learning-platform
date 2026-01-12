@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAuthStore } from "../../store/authStore";
-import { URL_HOME, URL_LOGIN } from "../../constants/constsUrlPath";
+import { useAuthStore } from "../store/authStore";
+import { URL_HOME, URL_LOGIN } from "../constants/constsUrlPath";
 
 export function ProtectedRoute() {
     const { isAuthenticated } = useAuthStore()

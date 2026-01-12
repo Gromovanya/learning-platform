@@ -1,13 +1,12 @@
 // src/pages/Auth/Register.tsx
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import DropdownHintPassword from '../../components/Button/HintPassword';
+import DropdownHintPassword from '../../components/HintPassword';
 import { USERNAME_FIELD, PASSWORD_FIELD, CONFIRM_PASSWORD_FIELD, COMMON_FIELD } from '../../constants/constsFormKeys';
 import { useForm } from '../../hooks/form';
 import axios from 'axios';
 import '../../app/index.css';
 import { URL_HOME, URL_LOGIN } from '../../constants/constsUrlPath';
-import type { ErrorMessagesRegister } from '../../types';
 import { authService } from '../../services/authSerivce';
 
 
@@ -46,7 +45,7 @@ function RegisterPage() {
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
                 if (error.response?.status === 400) {
-                    const data: ErrorMessagesRegister = error.response.data;
+                    const data: Record<string, string[]> = error.response.data;
                     if (data && typeof data === 'object') {
                         setServerErrors(data);
                     }

@@ -7,13 +7,16 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { Author } from './models/Author';
 export type { AuthResponse } from './models/AuthResponse';
-export type { CSRFCookieResponse } from './models/CSRFCookieResponse';
+export type { MyTokenRefresh } from './models/MyTokenRefresh';
+export type { PaginatedSessionList } from './models/PaginatedSessionList';
+export type { PatchedSession } from './models/PatchedSession';
 export type { Register } from './models/Register';
+export type { Session } from './models/Session';
+export type { SimpleDetail } from './models/SimpleDetail';
 export type { SimpleError } from './models/SimpleError';
-export type { TokenObtainPair } from './models/TokenObtainPair';
-export type { TokenRefresh } from './models/TokenRefresh';
+export type { User } from './models/User';
 
 export { ApiService } from './services/ApiService';
 export { AuthService } from './services/AuthService';
-export { UtilityService } from './services/UtilityService';

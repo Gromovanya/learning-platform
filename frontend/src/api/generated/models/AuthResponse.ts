@@ -2,13 +2,15 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { User } from './User';
 /**
  * Описывает структуру JSON-ответа. Хранит access токен, для доступа пользователя
  */
 export type AuthResponse = {
     /**
-     * Токен доступа пользователя
+     * JWT access токен
      */
     access: string;
+    readonly user: User;
 };
 

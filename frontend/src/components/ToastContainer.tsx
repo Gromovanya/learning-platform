@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNotificationStore } from '../../store/notificationStore';
+import { useNotificationStore } from '../store/notificationStore';
 
 // Компоненты-иконки для чистоты кода
 const Icons = {

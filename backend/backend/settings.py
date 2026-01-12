@@ -48,7 +48,10 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_spectacular',
     'apps.users',
+    'apps.education',
 ]
+
+AUTH_USER_MODEL = 'users.User'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -63,6 +66,8 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ['rest_framework_simplejwt.authentication.JWTAuthentication'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.CursorPagination',
+    'DEFAULT_PAGE_SIZE': 10,
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
@@ -103,6 +108,9 @@ SPECTACULAR_SETTINGS = {
 }
 
 ROOT_URLCONF = 'backend.urls'
+
+MEDIA_URL = '/media/'
+os.path.join(BASE_DIR, 'media')
 
 TEMPLATES = [
     {

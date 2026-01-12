@@ -5,8 +5,9 @@ export function useForm<V extends object, E>(initialValues: V, initialErrors: E)
     const [errors, setErrors] = useState(initialErrors);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target
-
+        const target = e.target as HTMLInputElement
+        const name = target.name
+        const value = target.type === 'checkbox' ? target.checked : target.value
         setValues((prev) => ({
             ...prev,
             [name]: value,

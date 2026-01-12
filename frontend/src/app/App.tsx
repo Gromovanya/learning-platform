@@ -3,8 +3,8 @@ import { router } from './router';
 import { useEffect } from 'react';
 import { authService } from '../services/authSerivce';
 import { useAuthStore } from '../store/authStore';
-import ToastContainer from '../components/Toast/ToastContainer';
 import { useNetworkStatus } from '../hooks/networkStatus';
+import Initialized from '../components/Initialized';
 // import { api } from '../api/api';
 
 function App() {
@@ -18,14 +18,9 @@ function App() {
   }, [])
 
   if (!isInitialized) {
-    return <div className="loader">Загрузка сессии...</div>;
+    return <Initialized />
   }
-  return (
-    <div>
-      <RouterProvider router={router} />
-      <ToastContainer />
-    </div>
-  );
+  return <RouterProvider router={router} />
 };
 
 export default App

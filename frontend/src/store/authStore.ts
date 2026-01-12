@@ -1,17 +1,17 @@
 import { create } from "zustand";
+import { UserSchema, type User } from "../shared/api/schemas";
 
-type AuthState = {
+
+interface AuthState {
     accessToken: string | null;
     isAuthenticated: boolean;
     isInitialized: boolean;
-    id: number | null;
-    username: string;
-    firstName: string;
-    lastName: string;
+    user: User | null;
+
     setInitialized: (init: boolean) => void;
     setAccessToken: (token: string | null) => void;
+    setUser: (user: unknown) => void;
     logout: () => void;
-    saveDataUser: (newId: number, newUsername: string, newFirstName?: string, newLastName?: string) => void
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -19,27 +19,31 @@ export const useAuthStore = create<AuthState>((set) => ({
     isAuthenticated: false,
     isInitialized: false,
 
-    id: null,
-    username: 'Anonymous',
-    firstName: '',
-    lastName: '',
+    user: null,
 
     setAccessToken: (token) => set({
         accessToken: token,
         isAuthenticated: !!token,
-        isInitialized: true
+        isInitialized: false
     }),
     setInitialized: (init) => set({ isInitialized: init }),
     logout: () => {
         set({
             accessToken: null,
             isAuthenticated: false,
+            user: null
         })
     },
-    saveDataUser: (newId, newUsername, newFirstName = '', newLastName = '') => set({
-        id: newId,
-        username: newUsername,
-        firstName: newFirstName,
-        lastName: newLastName,
-    })
+    setUser: (userData) => { 
+        const result = UserSchema.safeParse(userData)
+        if (result.success) {
+            set({
+                user: result.data, 
+                isAuthenticated: true,
+                isInitialized: true
+            })
+        } else {
+            console.error("Ошибка валидации данных пользователя:", result.error.format());
+        }
+    }
 }))

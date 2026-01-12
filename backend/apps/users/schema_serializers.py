@@ -1,12 +1,6 @@
 from rest_framework import serializers
+from .serializers import UserSerializer
 
-
-class CSRFCookieResponseSerializer(serializers.Serializer):
-    """Описывает структуру JSON-ответа, возвращаемого после установки CSRF-куки."""
-    detail = serializers.CharField(
-        max_length=50,
-        help_text='Сообщение подтверждения'
-    )
 
 class SimpleErrorSerializer(serializers.Serializer):
     """Стандартизированный сериализатор для ошибок (400, 401 и т.д.)."""
@@ -15,10 +9,16 @@ class SimpleErrorSerializer(serializers.Serializer):
         max_length=255
     )
 
+class SimpleDetailSerializer(serializers.Serializer):
+    """Стандартизированный сериализатор для подробности об ответе запроса (401, 200 и т.д.)."""
+    detail = serializers.CharField(
+        help_text="Сообщение, с важной ифнормацией.",
+        max_length=255
+    )
+
 class AuthResponseSerializer(serializers.Serializer):
     """Описывает структуру JSON-ответа. Хранит access токен, для доступа пользователя"""
-    access = serializers.CharField(
-        max_length=100,
-        help_text='Токен доступа пользователя'
-    )
+    access = serializers.CharField(help_text='JWT access токен')
+    user = UserSerializer(read_only=True)
+    
     
