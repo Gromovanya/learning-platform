@@ -1,4 +1,6 @@
+import uuid
 from drf_spectacular.utils import extend_schema
+from django.core.cache import cache
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.views import TokenRefreshView
@@ -7,9 +9,9 @@ from rest_framework.response import Response
 from .serializers import RegisterSerializer, MyTokenRefreshSerializer
 from . import schema_serializers
 from .decorators import handle_auth_response
-from django.conf import settings
 from django.contrib.auth import authenticate
-from rest_framework import viewsets, status, filters
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
 
 class LoginView(APIView):
     """
@@ -132,6 +134,19 @@ class NewAccessTokenView(TokenRefreshView):
         response.user_obj = getattr(serializer, 'user_obj', None)
         return response
     
+class GetWSTicketView(APIView):
+    def post(self, request):
+        ticket = str(uuid.uuid4())
+        cache_key = f"ws_ticket_{ticket}"
+
+        if request.user.is_authenticated:
+            data = f"{request.user.id}:user"
+        else:
+            guest_id = str(uuid.uuid4())[:8]
+            data = f"{guest_id}:guest"
+        cache.set(cache_key, data, timeout=30)
+        return Response({"ticket": ticket})
+
 class Error500View(APIView):
     def get(self, request, *args, **kwargs):
         return Response(data={'detail': 'test toast window is error on front!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

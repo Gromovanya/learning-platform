@@ -34,6 +34,10 @@ class Card(models.Model):
     is_opened = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def messages_card_count(self):
+        return self.messages.count()
+
     def __str__(self):
         return f"{self.title} (Session: {self.session.id})"
 

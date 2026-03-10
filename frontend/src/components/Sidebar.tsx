@@ -17,10 +17,6 @@ function Sidebar() {
         setQueryParam('search', debouncedSearch || undefined)
     }, [debouncedSearch, setQueryParam])
 
-    useEffect(() => {
-        console.log("URL Query изменился:", query)
-    }, [query])
-
     return (
     <aside className="w-72 border-r border-white/5 bg-[#0f172a]/80 backdrop-blur-xl p-6 flex flex-col gap-10 h-screen sticky top-0">
         {/* Поиск */}

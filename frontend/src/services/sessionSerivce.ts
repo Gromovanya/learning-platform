@@ -12,8 +12,8 @@ export const sessionService = {
         const resp = await api.get<SessionsList>(API_SESSION, {params: curParams, signal})
         return resp.data
     },
-    async getDetailSession(idSession: number): Promise<Session> {
-        const resp = await api.get<Session>(getDetailPath(API_SESSION, idSession))
+    async getDetailSession(idSession: number | string, signal?: AbortSignal | undefined): Promise<Session> {
+        const resp = await api.get<Session>(getDetailPath(API_SESSION, idSession), {signal})
         return resp.data
     },
     async createSession(data: SessionShort): Promise<Session> {

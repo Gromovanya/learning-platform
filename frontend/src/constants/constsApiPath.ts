@@ -1,5 +1,6 @@
 export const BASE_API = "/api"
 export const API_LOGIN = "/auth/login/"
+export const API_GET_TICKET = "/auth/ticket/"
 export const API_REGISTER = "/auth/register/"
 export const API_REFRESH = "/auth/refresh/"
 export const API_LOGOUT = "/auth/logout/"

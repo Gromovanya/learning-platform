@@ -1,13 +1,21 @@
 import { useCallback, useEffect } from "react";
 import { useSessionStore } from "../store/sessionStore";
 import { sessionService } from "../services/sessionSerivce";
+import axios from "axios";
 
 export function useSession({ inView }: { inView: boolean }) {
     const { query, isLoading, isFetchingNext, nextCursor, setSessions, addSessions, setFetching } = useSessionStore()
 
     const getInitialSessions = useCallback(async (signal: AbortSignal) => {
-        const data = await sessionService.getListSessions(query, undefined, signal)
-        setSessions(data)
+        try {
+            const data = await sessionService.getListSessions(query, undefined, signal)
+            setSessions(data)
+        } catch (err) {
+            if (axios.isCancel(err)) {
+                console.log("Запросы отменены: компонент размонтирован");
+            }
+        }
+        
     }, [setSessions, query])
 
     const loadMoreSessions = useCallback(async () => {

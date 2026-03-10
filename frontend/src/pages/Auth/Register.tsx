@@ -59,16 +59,22 @@ function RegisterPage() {
     };
 
     return (
-        <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-br from-indigo-900 via-slate-800 to-black px-4">
-            <div className="bg-white shadow-2xl rounded-3xl p-8 sm:p-12 max-w-md w-full border border-white/10">
-                <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-2">Создать аккаунт</h2>
-                <p className="text-center text-gray-500 mb-10 text-sm">Добро пожаловать!</p>
+        <div className="h-dvh w-screen flex items-center justify-center bg-[#0b101a] relative overflow-hidden px-4">
+            
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full pointer-events-none" />
+
+            <div className="bg-white/[0.03] backdrop-blur-xl shadow-2xl rounded-[2.5rem] p-8 sm:p-10 max-w-md w-full border border-white/10 relative max-h-[95vh] overflow-y-auto custom-scrollbar">
+                <header className="text-center mb-8">
+                    <h2 className="text-4xl font-black text-white mb-2 tracking-tight">Создать аккаунт</h2>
+                    <p className="text-slate-400 text-sm">Начни путь совместного обучения 🚀</p>
+                </header>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                     
                     {/* Имя пользователя */}
-                    <div className="flex flex-col">
-                        <label htmlFor={USERNAME_FIELD} className="text-gray-700 mb-1.5 ml-1 text-sm font-semibold">
+                    <div className="flex flex-col gap-1.5">
+                        <label htmlFor={USERNAME_FIELD} className="text-slate-300 ml-1 text-sm font-medium">
                             Имя пользователя
                         </label>
                         <input
@@ -76,28 +82,24 @@ function RegisterPage() {
                             id={USERNAME_FIELD}
                             type="text"
                             placeholder="ivan_ivanov"
-                            className={`w-full p-3.5 border rounded-xl outline-none transition-all duration-200
-                                ${errors[USERNAME_FIELD]?.length > 0 ? 'border-red-500' : 'border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10'}
-                                shadow-[0_0_0_1000px_#2b2f36_inset] placeholder:text-gray-400 text-gray-200`}
+                            className={`w-full p-4 bg-white/5 border rounded-2xl outline-none transition-all duration-300
+                                text-white placeholder:text-slate-600
+                                ${errors[USERNAME_FIELD]?.length > 0 
+                                    ? 'border-red-500/50 bg-red-500/5 ring-4 ring-red-500/10' 
+                                    : 'border-white/10 focus:border-indigo-500/50 focus:bg-white/[0.08] focus:ring-4 focus:ring-indigo-500/10'
+                                }`}
                             value={values[USERNAME_FIELD]}
                             onChange={handleChange}
                             autoComplete="username"
                         />
-                        {/* Вывод списка ошибок для Имени */}
-                        {errors[USERNAME_FIELD]?.length > 0 && (
-                            <div className="mt-1.5 ml-1 flex flex-col gap-1">
-                                {errors[USERNAME_FIELD].map((err, i) => (
-                                    <p key={i} className="text-red-500 text-xs font-medium animate-in fade-in slide-in-from-top-1">
-                                        • {err}
-                                    </p>
-                                ))}
-                            </div>
-                        )}
+                        {errors[USERNAME_FIELD]?.map((err, i) => (
+                            <p key={i} className="text-red-400 text-xs ml-2 animate-in fade-in slide-in-from-left-1">• {err}</p>
+                        ))}
                     </div>
 
                     {/* Пароль */}
-                    <div className="flex flex-col">
-                        <label htmlFor={PASSWORD_FIELD} className="text-gray-700 mb-1.5 ml-1 text-sm font-semibold">
+                    <div className="flex flex-col gap-1.5">
+                        <label htmlFor={PASSWORD_FIELD} className="text-slate-300 ml-1 text-sm font-medium">
                             Пароль
                         </label>
                         <div className='relative flex items-center'>
@@ -105,35 +107,29 @@ function RegisterPage() {
                                 name={PASSWORD_FIELD}
                                 id={PASSWORD_FIELD}
                                 type="password"
-                                placeholder="Придумайте надёжный пароль"
-                                className={`block w-full p-3.5 border rounded-xl outline-none transition-all duration-200
+                                placeholder="Придумайте пароль"
+                                className={`w-full p-4 bg-white/5 border rounded-2xl outline-none transition-all duration-300
+                                    text-white placeholder:text-slate-600 pr-12
                                     ${errors[PASSWORD_FIELD]?.length > 0 
-                                        ? 'border-red-500 ring-2 ring-red-500/20' 
-                                        : 'border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 shadow-[0_0_0_1000px_#2b2f36_inset]'}
-                                    placeholder:text-gray-400 text-gray-200 pr-11`}
+                                        ? 'border-red-500/50 bg-red-500/5 ring-4 ring-red-500/10' 
+                                        : 'border-white/10 focus:border-indigo-500/50 focus:bg-white/[0.08] focus:ring-4 focus:ring-indigo-500/10'
+                                    }`}
                                 value={values[PASSWORD_FIELD]}
                                 onChange={handleChange}
                                 autoComplete="current-password"
                             />
-                            <div className="absolute right-2">
+                            <div className="absolute right-3 opacity-70 hover:opacity-100 transition-opacity">
                                 <DropdownHintPassword />
                             </div>
                         </div>
-                        {/* Вывод списка ошибок для Пароля */}
-                        {errors[PASSWORD_FIELD]?.length > 0 && (
-                            <div className="mt-1.5 ml-1 flex flex-col gap-1">
-                                {errors[PASSWORD_FIELD].map((err, i) => (
-                                    <p key={i} className="text-red-500 text-xs font-medium animate-in fade-in slide-in-from-top-1">
-                                        • {err}
-                                    </p>
-                                ))}
-                            </div>
-                        )}
+                        {errors[PASSWORD_FIELD]?.map((err, i) => (
+                            <p key={i} className="text-red-400 text-xs ml-2 animate-in fade-in slide-in-from-left-1">• {err}</p>
+                        ))}
                     </div>
 
                     {/* Подтверждение пароля */}
-                    <div className="flex flex-col">
-                        <label htmlFor={CONFIRM_PASSWORD_FIELD} className="text-gray-700 mb-1.5 ml-1 text-sm font-semibold">
+                    <div className="flex flex-col gap-1.5">
+                        <label htmlFor={CONFIRM_PASSWORD_FIELD} className="text-slate-300 ml-1 text-sm font-medium">
                             Подтвердите пароль
                         </label>
                         <input
@@ -141,31 +137,26 @@ function RegisterPage() {
                             id={CONFIRM_PASSWORD_FIELD}
                             type="password"
                             placeholder="Повторите пароль"
-                            className={`w-full p-3.5 border rounded-xl outline-none transition-all duration-200
-                                ${errors[CONFIRM_PASSWORD_FIELD]?.length > 0 ? 'border-red-500' : 'border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10'}
-                                shadow-[0_0_0_1000px_#2b2f36_inset] placeholder:text-gray-400 text-gray-200`}
+                            className={`w-full p-4 bg-white/5 border rounded-2xl outline-none transition-all duration-300
+                                text-white placeholder:text-slate-600
+                                ${errors[CONFIRM_PASSWORD_FIELD]?.length > 0 
+                                    ? 'border-red-500/50 bg-red-500/5 ring-4 ring-red-500/10' 
+                                    : 'border-white/10 focus:border-indigo-500/50 focus:bg-white/[0.08] focus:ring-4 focus:ring-indigo-500/10'
+                                }`}
                             value={values[CONFIRM_PASSWORD_FIELD]}
                             onChange={handleChange}
                             autoComplete="current-password"
                         />
-                        {errors[CONFIRM_PASSWORD_FIELD]?.length > 0 && (
-                            <div className="mt-1.5 ml-1 flex flex-col gap-1">
-                                {errors[CONFIRM_PASSWORD_FIELD].map((err, i) => (
-                                    <p key={i} className="text-red-500 text-xs font-medium animate-in fade-in slide-in-from-top-1">
-                                        • {err}
-                                    </p>
-                                ))}
-                            </div>
-                        )}
+                        {errors[CONFIRM_PASSWORD_FIELD]?.map((err, i) => (
+                            <p key={i} className="text-red-400 text-xs ml-2 animate-in fade-in slide-in-from-left-1">• {err}</p>
+                        ))}
                     </div>
 
-                    {/* --- ОБЩИЕ ОШИБКИ ФОРМЫ (например, COMMON_FIELD) --- */}
+                    {/* Общая ошибка */}
                     {errors[COMMON_FIELD]?.length > 0 && (
-                        <div className="bg-red-50 border border-red-200 p-3 rounded-xl animate-in zoom-in-95 duration-200">
+                        <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-2xl animate-in zoom-in-95">
                             {errors[COMMON_FIELD].map((err, i) => (
-                                <p key={i} className="text-red-600 text-sm text-center font-semibold">
-                                    {err}
-                                </p>
+                                <p key={i} className="text-red-400 text-sm text-center font-semibold">{err}</p>
                             ))}
                         </div>
                     )}
@@ -173,28 +164,24 @@ function RegisterPage() {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="mt-2 w-full bg-green-600 text-white py-4 rounded-xl font-bold text-lg 
-                                hover:bg-green-700 active:scale-[0.98] transition-all shadow-lg shadow-green-200/50
-                                disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+                        className="mt-2 w-full bg-indigo-600 hover:bg-indigo-500 text-white py-4 rounded-2xl font-bold text-lg 
+                                 active:scale-[0.98] transition-all shadow-xl shadow-indigo-500/20
+                                 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {isLoading ? "Загрузка..." : "Зарегистрироваться"}
+                        {isLoading ? "Создание профиля..." : "Зарегистрироваться"}
                     </button>
                 </form>
 
-                {/* Разделитель "Или" */}
                 <div className="relative my-8">
-                    <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t border-gray-100"></span>
-                    </div>
+                    <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-white/5"></span></div>
                     <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-white px-2 text-gray-400 font-medium">Или</span>
+                        <span className="bg-[#111622] px-4 text-slate-500 font-bold tracking-widest">Или</span>
                     </div>
                 </div>
 
-                <p className="text-center text-gray-600 text-sm">
+                <p className="text-center text-slate-400 text-sm">
                     Уже есть аккаунт? 
-                    <Link to={URL_LOGIN} state={location.state} 
-                        className="text-indigo-600 font-bold hover:text-indigo-500 transition-colors ml-1">
+                    <Link to={URL_LOGIN} className="text-indigo-400 font-bold hover:text-indigo-300 transition-all ml-2 underline-offset-4 hover:underline">
                         Войти
                     </Link>
                 </p>

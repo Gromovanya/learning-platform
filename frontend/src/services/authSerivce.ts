@@ -1,6 +1,6 @@
 import { api } from "../api/api"
 import type { AuthResponse, Register } from "../api/generated";
-import { API_LOGIN, API_LOGOUT, API_REFRESH, API_REGISTER } from "../constants/constsApiPath"
+import { API_GET_TICKET, API_LOGIN, API_LOGOUT, API_REFRESH, API_REGISTER } from "../constants/constsApiPath"
 import axios, { type AxiosResponse } from "axios";
 import { useAuthStore } from "../store/authStore";
 import { useNotificationStore } from "../store/notificationStore";
@@ -66,9 +66,16 @@ export const authService = {
             if (axios.isAxiosError(error) && error.response?.status === 401) {
                 console.warn("Session init: User is guest or session expired: ", error.response?.data);
                 useAuthStore.getState().logout();
+            } else if (axios.isAxiosError(error) && error.response?.status === 400) {
+                console.warn(error.response?.data);
             }
         } finally {
             useAuthStore.getState().setInitialized(true);
         }
+    },
+
+    async getTicket(signal?: AbortSignal | undefined) {
+        const resp = await api.post(API_GET_TICKET, {signal})
+        return resp.data
     }
 }

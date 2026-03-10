@@ -2,13 +2,13 @@ from rest_framework import viewsets
 from .models import Session
 from .serializers import SessionSerializer
 from .pagination import SessionCursorPagination
-from .permission import IsAuthorOrReadOnly
+from .permission import IsAuthorOrReadOnly, IsParticipantSession
 
 
 class SessionViewSet(viewsets.ModelViewSet):
     serializer_class = SessionSerializer
     pagination_class = SessionCursorPagination
-    permission_classes = [IsAuthorOrReadOnly]
+    permission_classes = [IsAuthorOrReadOnly, IsParticipantSession]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -19,7 +19,6 @@ class SessionViewSet(viewsets.ModelViewSet):
         if is_private is None:
             return qs_sessions
         elif is_private.lower() == 'true':
-            print(is_private)
             return qs_sessions.filter(is_private=True)
         elif is_private.lower() == 'false':
             return qs_sessions.filter(is_private=False)

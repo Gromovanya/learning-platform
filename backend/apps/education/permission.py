@@ -10,3 +10,9 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         return request.user == obj.author
+    
+class IsParticipantSession(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if not obj.is_private:
+            return True
+        return request.user.is_authenticated and obj.participants.filter(user=request.user).exists()

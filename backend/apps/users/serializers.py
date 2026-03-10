@@ -4,6 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -27,13 +28,13 @@ class RegisterSerializer(serializers.ModelSerializer):
     
 class MyTokenRefreshSerializer(TokenRefreshSerializer):
     def validate(self, attrs):
-        data = super().validate(attrs)
-        refresh = RefreshToken(data.get('refresh'))
-        user_id = refresh.payload.get('user_id')
-        user = User.objects.get(id=user_id)
-        if user:
-            self.user_obj = user
-        return data
+        try:
+            data = super().validate(attrs)
+            refresh = RefreshToken(data.get('refresh'))
+            self.user_obj = User.objects.get(id=refresh.payload.get('user_id'))
+            return data
+        except (TokenError, User.DoesNotExist):
+            raise serializers.ValidationError(detail='Token is blacklisted')
     
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:

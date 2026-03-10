@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import { useAuthStore } from "../../store/authStore";
@@ -9,14 +10,12 @@ import SessionsLoader from "../../components/SkeletonsSession";
 import { useSession } from "../../hooks/sessions";
 import MainPageSkeleton from "../../components/MainSkeleton";
 import { useSessionStore } from "../../store/sessionStore";
-import { useNavigate } from "react-router-dom";
 import { URL_SESSION } from "../../constants/constsUrlPath";
 import { getDetailPath } from "../../utils/pathUtils";
 
 
 function MainPage() {
     const { isAuthenticated } = useAuthStore();
-    const navigate = useNavigate()
     const { query, isLoading, sessions, isFetchingNext } = useSessionStore()
     const [ isCreateModalOpen, setIsCreateModalOpen ] = useState(false)
 
@@ -37,7 +36,7 @@ function MainPage() {
         <>
             <Sidebar />
 
-            <div key={queryKey} className=" flex-1 overflow-y-auto p-8 custom-scrollbar bg-[#0f172a]">
+            <div key={queryKey} className=" flex-1 overflow-y-auto p-8 custom-scrollbar">
                 {/* Секция приветствия */}
                 <section className="mb-12">
                     {isAuthenticated ? (
@@ -83,40 +82,40 @@ function MainPage() {
                 {sessions.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {sessions.map((session) => (
-                            <div 
-                                onClick={() => navigate(getDetailPath(URL_SESSION, session.id))}
-                                key={session.id} 
-                                className="bg-white/5 border border-white/10 p-6 rounded-[1.5rem] hover:bg-white/[0.08] hover:border-indigo-500/50 transition-all group cursor-pointer flex flex-col h-full"
-                            >
-                                <div className="flex justify-between items-start mb-4">
-                                    <div className="flex items-center gap-2">
-                                        <div className={`w-9 h-9 rounded-xl border border-white/10 flex items-center justify-center text-sm font-bold text-white shadow-inner ${getAvatarColor(session.author.username)}`}>
-                                            {session.author.username.charAt(0).toUpperCase()}
+                                <Link 
+                                    to={getDetailPath(URL_SESSION, session.id)}
+                                    key={session.id} 
+                                    className="bg-white/5 border border-white/10 p-6 rounded-[1.5rem] hover:bg-white/[0.08] hover:border-indigo-500/50 transition-all group cursor-pointer flex flex-col h-full"
+                                >
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className="flex items-center gap-2">
+                                            <div className={`w-9 h-9 rounded-xl border border-white/10 flex items-center justify-center text-sm font-bold text-white shadow-inner ${getAvatarColor(session.author.username)}`}>
+                                                {session.author.username.charAt(0).toUpperCase()}
+                                            </div>
+                                            <span className="text-xs text-gray-400 font-semibold group-hover:text-gray-300">{session.author.username}</span>
                                         </div>
-                                        <span className="text-xs text-gray-400 font-semibold group-hover:text-gray-300">{session.author.username}</span>
+                                        <span className={`text-[10px] uppercase tracking-widest px-2 py-1 rounded-lg font-bold ${session.is_private ? 'bg-amber-500/10 text-amber-500' : 'bg-emerald-500/10 text-emerald-500'}`}>
+                                            {session.is_private ? "🔒 Private" : "🔓 Public"}
+                                        </span>
                                     </div>
-                                    <span className={`text-[10px] uppercase tracking-widest px-2 py-1 rounded-lg font-bold ${session.is_private ? 'bg-amber-500/10 text-amber-500' : 'bg-emerald-500/10 text-emerald-500'}`}>
-                                        {session.is_private ? "🔒 Private" : "🔓 Public"}
-                                    </span>
-                                </div>
-                                
-                                <h3 className="text-white font-bold text-xl mb-2 group-hover:text-indigo-400 transition-colors line-clamp-1">
-                                    {session.title}
-                                </h3>
-                                <p className="text-gray-500 text-sm line-clamp-2 mb-6 flex-grow">
-                                    {session.description}
-                                </p>
-                                
-                                <div className="flex items-center justify-between border-t border-white/5 pt-4">
-                                    <div className="flex -space-x-2">
-                                        {/* Тут можно зарендерить маленькие аватарки участников */}
-                                        <div className="w-6 h-6 rounded-full bg-slate-700 border-2 border-[#1e293b] flex items-center justify-center text-[10px] text-white">
-                                            +{session.participants_count}
+                                    
+                                    <h3 className="text-white font-bold text-xl mb-2 group-hover:text-indigo-400 transition-colors line-clamp-1">
+                                        {session.title}
+                                    </h3>
+                                    <p className="text-gray-500 text-sm line-clamp-2 mb-6 flex-grow">
+                                        {session.description}
+                                    </p>
+                                    
+                                    <div className="flex items-center justify-between border-t border-white/5 pt-4">
+                                        <div className="flex -space-x-2">
+                                            {/* Тут можно зарендерить маленькие аватарки участников */}
+                                            <div className="w-6 h-6 rounded-full bg-slate-700 border-2 border-[#1e293b] flex items-center justify-center text-[10px] text-white">
+                                                +{session.participants_count}
+                                            </div>
                                         </div>
+                                        <span className="text-xs font-bold text-indigo-400">Вступить →</span>
                                     </div>
-                                    <span className="text-xs font-bold text-indigo-400">Вступить →</span>
-                                </div>
-                            </div>
+                                </Link>
                         ))}
                         
                         <div ref={ref}></div>

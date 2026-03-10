@@ -52,15 +52,21 @@ function LoginPage() {
     };
 
     return (
-        <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-br from-indigo-900 via-slate-800 to-black px-4">
-            <div className="bg-white shadow-2xl rounded-3xl p-8 sm:p-12 max-w-md w-full border border-white/10">
-                <h2 className="text-4xl font-extrabold text-center text-gray-900 mb-2">Войти</h2>
-                <p className="text-center text-gray-500 mb-10 text-sm">Добро пожаловать обратно!</p>
+        <div className="h-dvh w-screen flex items-center justify-center bg-[#0b101a] relative overflow-hidden px-4">
+            
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none" />
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full pointer-events-none" />
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+            <div className="bg-white/[0.03] backdrop-blur-xl shadow-2xl rounded-[2.5rem] p-8 sm:p-12 max-w-md w-full border border-white/10 relative z-10">
+                <header className="text-center mb-10">
+                    <h2 className="text-4xl font-black text-white mb-2 tracking-tight">Войти</h2>
+                    <p className="text-slate-400 text-sm">Рады видеть тебя снова! ✨</p>
+                </header>
+
+                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                     {/* Поле Имя */}
-                    <div className="flex flex-col">
-                        <label htmlFor={USERNAME_FIELD} className="text-gray-700 mb-1.5 ml-1 text-sm font-semibold">
+                    <div className="flex flex-col gap-2">
+                        <label htmlFor={USERNAME_FIELD} className="text-slate-300 ml-1 text-sm font-medium">
                             Имя пользователя
                         </label>
                         <input
@@ -68,11 +74,12 @@ function LoginPage() {
                             id={USERNAME_FIELD}
                             type="text"
                             placeholder="ivan_ivanov"
-                            className={`w-full p-3.5 border rounded-xl outline-none transition-all duration-200
+                            className={`w-full p-4 bg-white/5 border rounded-2xl outline-none transition-all duration-300
+                                text-white placeholder:text-slate-600
                                 ${errors[COMMON_FIELD]?.length > 0 
-                                    ? 'border-red-500 ring-2 ring-red-500/10' 
-                                    : 'border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10'} 
-                                shadow-[0_0_0_1000px_#2b2f36_inset] placeholder:text-gray-400 text-gray-200`}
+                                    ? 'border-red-500/50 bg-red-500/5 ring-4 ring-red-500/10' 
+                                    : 'border-white/10 focus:border-indigo-500/50 focus:bg-white/[0.08] focus:ring-4 focus:ring-indigo-500/10'
+                                }`}
                             value={values[USERNAME_FIELD]}
                             onChange={handleChange}
                             autoComplete="username"
@@ -80,8 +87,8 @@ function LoginPage() {
                     </div>
 
                     {/* Поле Пароль */}
-                    <div className="flex flex-col">
-                        <label htmlFor={PASSWORD_FIELD} className="text-gray-700 mb-1.5 ml-1 text-sm font-semibold">
+                    <div className="flex flex-col gap-2">
+                        <label htmlFor={PASSWORD_FIELD} className="text-slate-300 ml-1 text-sm font-medium">
                             Пароль
                         </label>
                         <input
@@ -89,24 +96,23 @@ function LoginPage() {
                             id={PASSWORD_FIELD}
                             type="password"
                             placeholder="••••••••••••"
-                            className={`w-full p-3.5 border rounded-xl outline-none transition-all duration-200
+                            className={`w-full p-4 bg-white/5 border rounded-2xl outline-none transition-all duration-300
+                                text-white placeholder:text-slate-600
                                 ${errors[COMMON_FIELD]?.length > 0 
-                                    ? 'border-red-500 ring-2 ring-red-500/10' 
-                                    : 'border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10'} 
-                                shadow-[0_0_0_1000px_#2b2f36_inset] placeholder:text-gray-400 text-gray-200`}
+                                    ? 'border-red-500/50 bg-red-500/5 ring-4 ring-red-500/10' 
+                                    : 'border-white/10 focus:border-indigo-500/50 focus:bg-white/[0.08] focus:ring-4 focus:ring-indigo-500/10'
+                                }`}
                             value={values[PASSWORD_FIELD]}
                             onChange={handleChange}
                             autoComplete="current-password"
                         />
                     </div>
 
-                    {/* Блок общей ошибки — теперь над кнопкой */}
+                    {/* Ошибка */}
                     {errors[COMMON_FIELD]?.length > 0 && (
-                        <div className="bg-red-50 border border-red-200 p-3 rounded-xl animate-in zoom-in-95 duration-200">
+                        <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-2xl animate-in fade-in slide-in-from-top-2">
                             {errors[COMMON_FIELD].map((err, i) => (
-                                <p key={i} className="text-red-600 text-sm text-center font-semibold">
-                                    {err}
-                                </p>
+                                <p key={i} className="text-red-400 text-sm text-center font-medium">{err}</p>
                             ))}
                         </div>
                     )}
@@ -114,22 +120,33 @@ function LoginPage() {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="mt-4 w-full bg-indigo-600 text-white py-4 rounded-xl font-bold text-lg 
-                                hover:bg-indigo-700 active:scale-[0.98] transition-all shadow-lg shadow-indigo-200/50
-                                disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
+                        className="mt-2 w-full bg-indigo-600 hover:bg-indigo-500 text-white py-4 rounded-2xl font-bold text-lg 
+                                 active:scale-[0.98] transition-all shadow-xl shadow-indigo-500/20
+                                 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {isLoading ? "Загрузка..." : "Войти"}
+                        {isLoading ? (
+                             <span className="flex items-center justify-center gap-2">
+                                <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                Загрузка...
+                             </span>
+                        ) : "Войти в систему"}
                     </button>
                 </form>
 
-                <div className="relative my-8">
-                    <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-gray-100"></span></div>
-                    <div className="relative flex justify-center text-xs uppercase"><span className="bg-white px-2 text-gray-400 font-medium">Или</span></div>
+                <div className="relative my-10">
+                    <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t border-white/5"></span>
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-[#161b26] px-4 text-slate-500 font-semibold tracking-widest">Или</span>
+                    </div>
                 </div>
 
-                <p className="text-center text-gray-600 text-sm">
-                    Нет аккаунта? <Link to={URL_REGISTER} state={location.state} 
-                    className="text-indigo-600 font-bold hover:text-indigo-500 transition-colors ml-1">Создать сейчас</Link>
+                <p className="text-center text-slate-400 text-sm">
+                    Нет аккаунта? 
+                    <Link to={URL_REGISTER} className="text-indigo-400 font-bold hover:text-indigo-300 transition-all ml-2 underline-offset-4 hover:underline">
+                        Создать сейчас
+                    </Link>
                 </p>
             </div>
         </div>
@@ -137,3 +154,4 @@ function LoginPage() {
 };
 
 export default LoginPage;
+

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ..users.serializers import AuthorSerializer
-from .models import Session
+from .models import Session, Card
 from drf_spectacular.utils import extend_schema_field
 
 
@@ -22,3 +22,9 @@ class SessionSerializer(serializers.ModelSerializer):
         if user.is_authenticated:
             return obj.participants.filter(user=user).exists()
         return False
+    
+class CardSerializer(serializers.ModelSerializer):
+    messages_card_count = serializers.IntegerField(read_only=True)
+    class Meta:
+        model = Card
+        fields = ['id', 'session_id', 'title', 'description', 'answer', 'is_opened', 'created_at', 'messages_card_count']

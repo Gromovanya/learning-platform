@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNotificationStore } from "../store/notificationStore";
 
-export const useNetworkStatus = () => {
+export function useNetworkStatus() {
     const { addNotification } = useNotificationStore()
 
     useEffect(() => {
